@@ -1,0 +1,9 @@
+,,,,,,,,,,,
+,,,,,,,,,,oktober,39h 39m 00s,,176
+mail,datum,čas prihoda,čas odhoda,skupaj,,,,,,,,,
+demo@example.test,2026-10-06,07:01:00,15:02:00,08h 01m 00s,,,,,,,,,
+demo@example.test,2026-10-07,07:03:00,14:57:00,07h 54m 00s,,,,,,,,,
+demo@example.test,2026-10-08,07:00:00,15:00:00,08h 00m 00s,,,,,,,,,
+demo@example.test,2026-10-09,07:06:00,15:10:00,08h 04m 00s,,,,,,,,,
+demo@example.test,2026-10-10,07:12:00,14:52:00,07h 40m 00s,,,,,,,,,
+demo@example.test,2026-10-12,07:00:00,,,"Demo row: missing clock-out, edit to test correction flow.",,,,,,,

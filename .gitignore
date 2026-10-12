@@ -1,0 +1,3 @@
+# Local employee imports stay private; publish only synthetic demo data.
+data/*.csv
+!data/demo-timesheet.csv

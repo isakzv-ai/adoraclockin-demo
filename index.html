@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f6f2">
+  <title>Clockwise — Team time</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Clockwise home"><span class="brand-mark">c</span><span>clockwise<span class="brand-dot">.</span></span></a>
+    <div class="top-actions">
+      <span class="local-badge"><span></span> Saved on this device</span>
+      <button class="icon-button" id="exportBtn" type="button" title="Export current employee CSV" aria-label="Export CSV">⇩</button>
+      <button class="avatar" id="employeeInitials" type="button" title="Current employee">UR</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">TEAM TIME · EMPLOYEE VIEW</p>
+        <h1>Good day, <span id="employeeName">Demo</span><span class="period">.</span></h1>
+        <p class="subheading">A clear record of your hours, every shift.</p>
+      </div>
+      <div class="employee-switch-wrap" id="employeeSwitchWrap" hidden>
+        <label for="employeeSelect">Timesheet</label>
+        <select id="employeeSelect"></select>
+      </div>
+    </div>
+
+    <section class="clock-card" aria-labelledby="clockTitle">
+      <div class="clock-status">
+        <div class="status-icon" id="statusIcon"><span></span></div>
+        <div>
+          <p class="eyebrow" id="clockTitle">TODAY’S SHIFT</p>
+          <h2 id="clockStatus">You’re not clocked in</h2>
+          <p class="status-detail" id="clockDetail">Your workday hasn’t started yet.</p>
+        </div>
+      </div>
+      <div class="clock-actions">
+        <button class="clock-button" id="clockButton" type="button"><span class="clock-button-icon">↗</span><span id="clockButtonText">Clock in <small>Prihod</small></span></button>
+        <p id="clockHint">One tap records the current time.</p>
+      </div>
+    </section>
+
+    <section class="summary-section" aria-labelledby="monthTitle">
+      <div class="section-heading">
+        <div><p class="eyebrow">YOUR HOURS</p><h2 id="monthTitle">Month overview</h2></div>
+        <label class="month-select-wrap"><span class="sr-only">Select month</span><select id="monthSelect" aria-label="Select month"></select><span class="select-chevron">⌄</span></label>
+      </div>
+      <div class="summary-grid">
+        <article class="metric-card primary-metric">
+          <div class="metric-top"><span>Recorded hours</span><span class="metric-icon">◷</span></div>
+          <p class="metric-value" id="workedValue">—</p>
+          <p class="metric-caption" id="workedCaption">From completed shifts</p>
+          <div class="progress-track"><span id="progressBar"></span></div>
+          <p class="progress-caption" id="progressCaption">—</p>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Monthly target</span><span class="metric-icon target-icon">◎</span></div>
+          <p class="metric-value" id="targetValue">—</p>
+          <p class="metric-caption">Hours expected this month</p>
+          <p class="balance-pill" id="balanceValue">—</p>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Shifts</span><span class="metric-icon">▦</span></div>
+          <p class="metric-value" id="shiftCount">—</p>
+          <p class="metric-caption" id="shiftCaption">Completed this month</p>
+          <p class="sheet-total" id="sheetTotal"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="records-section" aria-labelledby="recordsTitle">
+      <div class="section-heading records-heading">
+        <div><p class="eyebrow">SHIFT HISTORY</p><h2 id="recordsTitle">Daily records</h2></div>
+        <div class="table-actions">
+          <button class="quiet-button" id="reviewFilter" type="button" aria-pressed="false">⚑ <span>Needs review</span><span class="count-dot" id="reviewCount">0</span></button>
+          <button class="quiet-button import-button" id="importBtn" type="button">＋ <span>Import employee CSV</span></button>
+          <input id="fileInput" type="file" accept=".csv,text/csv" hidden>
+        </div>
+      </div>
+      <div class="review-banner" id="reviewBanner" hidden></div>
+      <div class="records-card">
+        <div class="records-table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Clock in</th><th>Clock out</th><th>Duration</th><th>Notes / status</th><th><span class="sr-only">Edit</span></th></tr></thead>
+            <tbody id="recordsBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="emptyState" hidden><span>◷</span><h3>No shifts for this month</h3><p>Once you clock in, your records will show up here.</p></div>
+        <div class="table-footer" id="tableFooter"></div>
+      </div>
+    </section>
+
+    <aside class="import-warning" id="importWarning" hidden></aside>
+    <div class="device-note"><span>ⓘ</span><p>This preview saves changes in this browser only. To share updates between personal phones and a shared clock-in device, connect it to a secure shared database and employee sign-in before using it for live records.</p></div>
+    <footer>Clockwise <span>·</span> Time, made clear.</footer>
+  </main>
+
+  <dialog id="editDialog" class="edit-dialog">
+    <form id="editForm" method="dialog">
+      <div class="dialog-top"><div><p class="eyebrow">RECORD CORRECTION</p><h2>Edit shift</h2></div><button type="button" class="dialog-close" id="closeDialog" aria-label="Close">×</button></div>
+      <input type="hidden" id="editId">
+      <label>Date<input id="editDate" type="date" required></label>
+      <div class="time-fields"><label>Clock in<input id="editIn" type="time" step="1"></label><label>Clock out<input id="editOut" type="time" step="1"></label></div>
+      <label>Correction note <span class="field-optional">(required when changing a time)</span><textarea id="editNote" rows="3" placeholder="Explain the correction; the original values stay in history."></textarea></label>
+      <p class="dialog-audit" id="editAudit"></p>
+      <div class="dialog-actions"><button class="quiet-button" type="button" id="cancelEdit">Cancel</button><button class="save-button" type="submit">Save correction</button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

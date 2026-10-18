@@ -107,7 +107,7 @@
       <input type="hidden" id="editId">
       <label>Date<input id="editDate" type="date" required></label>
       <div class="time-fields"><label>Clock in<input id="editIn" type="time" step="1"></label><label>Clock out<input id="editOut" type="time" step="1"></label></div>
-      <label>Correction note <span class="field-optional">(required when changing a time)</span><textarea id="editNote" rows="3" placeholder="Explain the correction; the original values stay in history."></textarea></label>
+      <label>Correction note <span class="field-optional">(required when changing a time)</span><textarea id="editNote" rows="3" placeholder="Add a correction reason; existing notes are kept."></textarea></label>
       <p class="dialog-audit" id="editAudit"></p>
       <div class="dialog-actions"><button class="quiet-button" type="button" id="cancelEdit">Cancel</button><button class="save-button" type="submit">Save correction</button></div>
     </form>

@@ -19,3 +19,18 @@ Open <http://127.0.0.1:4173/>. The app loads `data/demo-timesheet.csv` on first 
 ## Important limitations
 
 This is a front-end prototype: there is no server, employee authentication, role separation, or cross-device sync. localStorage is not a reliable source for payroll or legal records. Before live use across personal phones and a shared clock-in device, add a secured shared backend, employee authentication, manager permissions, backups, and an approval trail.
+
+## Correction notes
+
+Saving a record keeps its existing notes. A new correction reason is appended to
+those notes and recorded in audit history, including when only a note is added.
+Changing a date or time still requires a new reason.
+
+To check this behavior locally, install Playwright for Python and its Chromium
+browser, start the local server above, then run:
+
+```sh
+python3 tests/test_shift_notes.py http://127.0.0.1:4173/
+```
+
+The check uses synthetic records in isolated browser contexts at phone and desktop widths.

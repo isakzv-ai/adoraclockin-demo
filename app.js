@@ -152,12 +152,13 @@ function editShift(shiftId) {
 function saveEdit(event) {
   event.preventDefault();
   const employee=currentEmployee(), shift=employee.shifts.find(s=>s.id===$('#editId').value); if (!shift) return;
-  const next={date:$('#editDate').value,start:$('#editIn').value,end:$('#editOut').value,notes:$('#editNote').value.trim()};
+  const reason=$('#editNote').value.trim();
+  const next={date:$('#editDate').value,start:$('#editIn').value,end:$('#editOut').value,notes:reason?[shift.notes,reason].filter(Boolean).join(' · '):(shift.notes||'')};
   const changed=next.date!==shift.date||next.start!==(shift.start||'')||next.end!==(shift.end||'');
-  if (changed&&!next.notes) { showToast('Add a note describing the correction.'); $('#editNote').focus(); return; }
+  if (changed&&!reason) { showToast('Add a note describing the correction.'); $('#editNote').focus(); return; }
   if (next.start&&next.end&&durationSeconds(next)===0) { showToast('Clock-out must be later than clock-in.'); return; }
   appState.audit=appState.audit||[];
-  if (changed) appState.audit.push({at:new Date().toISOString(),employee:employee.name,shift:shift.id,before:{date:shift.date,start:shift.start,end:shift.end},after:next,reason:next.notes});
+  if (changed||reason) appState.audit.push({at:new Date().toISOString(),employee:employee.name,shift:shift.id,before:{date:shift.date,start:shift.start,end:shift.end,notes:shift.notes||''},after:next,reason});
   Object.assign(shift,next,{updatedAt:new Date().toISOString()});
   save(); $('#editDialog').close(); render(); showToast(changed?'Correction saved with audit history':'Record saved');
 }
